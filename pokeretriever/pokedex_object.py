@@ -3,8 +3,7 @@ import abc
 
 class PokedexObject(abc.ABC):
     """
-    Toy defines the interface for one of the products that the
-    abstract factory pattern is responsible to create.
+    A representation of a pokedex.
     """
 
     @abc.abstractmethod
@@ -15,10 +14,13 @@ class PokedexObject(abc.ABC):
     @abc.abstractmethod
     def __str__(self):
         return f"Name: {self._name}\n" \
-               f"ID: {self._id}" \
+               f"ID: {self._id}"
 
 
 class Ability(PokedexObject):
+    """
+    A representation of an ability
+    """
     def __init__(self, name: str, id: int, generation: str, effect: str, short_effect: str, pokemon: list):
         super().__init__(name, id)
         self._generation = generation
@@ -35,6 +37,9 @@ class Ability(PokedexObject):
 
 
 class Stat(PokedexObject):
+    """
+    A representation of a stat.
+    """
 
     def __init__(self, name: str, id: int, base_stat: int, is_battle_only: bool):
         super().__init__(name, id)
@@ -48,6 +53,9 @@ class Stat(PokedexObject):
 
 
 class Move(PokedexObject):
+    """
+    A representation of a move.
+    """
 
     def __init__(self, name: str, id: int, generation: str, accuracy: int, pp: int,
                  power: int, move_type: str, damage_class: str, short_effect: str):
@@ -73,7 +81,7 @@ class Move(PokedexObject):
 
 class Pokemon(PokedexObject):
     """
-
+    A representation of a pokemon.
     """
 
     def __init__(self, name: str, id: int, height: int, weight: int, stats: list,

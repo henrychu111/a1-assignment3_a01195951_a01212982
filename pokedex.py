@@ -25,6 +25,20 @@ def setup_request_commandline() -> Request:
         args = parser.parse_args()
         request = Request()
         request.mode = PokedexMode(args.mode)
+
+        if args.inputdata is not None and args.inputdata == "":
+            exit("Error: Name or id must be provided!")
+
+        if args.inputfile is not None and args.inputfile == "":
+            exit("Error: Input file name must be provided!")
+        elif args.inputfile is not None and not args.inputfile.endswith(".txt"):
+            exit("Error: Input file name with \".txt\" extension must be provided!")
+
+        if args.output != "print" and args.output == "":
+            exit("Error: Output file name must be provided!")
+        elif args.output != "print" and not args.output.endswith(".txt"):
+            exit("Error: Output file name with \".txt\" extension must be provided!")
+
         request.data_input = args.inputdata
         request.input_file = args.inputfile
         request.output = args.output
@@ -32,24 +46,12 @@ def setup_request_commandline() -> Request:
             request.expanded = args.expanded
         return request
     except Exception as e:
-        print(f"Error! Could not read arguments.\n{e}")
+        print(f"Error: Could not read arguments.\n{e}")
         quit()
-
-
-def print_pokedex_result(request: Request, pokedex_result: list):
-    if request.output == "print":
-        for item in pokedex_result:
-            print(item)
-    else:
-        f = open(request.output, 'w')
-        for item in pokedex_result:
-            f.write(str(item))
-            f.write("\n")
-        f.close()
 
 
 if __name__ == '__main__':
     request = setup_request_commandline()
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    results = asyncio.run(execute_request(request))
-    print_pokedex_result(request, results)
+    results = asyncio.run(PokedexProvider.execute_request(request))
+    PokedexProvider.print_pokedex_result(request, results)
